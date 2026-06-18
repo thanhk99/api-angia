@@ -1,0 +1,35 @@
+server:
+  port: 8088
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: angia-api
+  datasource:
+    url: jdbc:postgresql://localhost:5432/angia
+    username: postgres
+    password: thanh48
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    prometheus:
+      enabled: true
+
+app:
+  jwt:
+    secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+    expiration-ms: 86400000 # 24h
+    refresh-expiration-ms: 604800000 # 7 days
