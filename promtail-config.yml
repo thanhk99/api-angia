@@ -1,0 +1,16 @@
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  - job_name: angia-api
+    static_configs:
+      - targets: [localhost]
+        labels:
+          job: angia-api
+          __path__: /var/log/angia-api/*.log
+    pipeline_stages:
+      - regex:
+          expression: '\[(?P<requestId>[^\]]+)\] \[(?P<traceId>[^\]]+)\]'
+      - labels:
+          requestId:
+          traceId:

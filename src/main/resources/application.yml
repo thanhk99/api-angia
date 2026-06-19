@@ -19,6 +19,13 @@ spring:
       hibernate:
         format_sql: false
 
+logging:
+  file:
+    name: logs/angia-api.log
+  level:
+    root: WARN
+    api.angia.com.shared.monitor: DEBUG
+
 management:
   endpoints:
     web:

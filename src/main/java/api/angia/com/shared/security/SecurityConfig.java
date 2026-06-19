@@ -1,6 +1,7 @@
 package api.angia.com.shared.security;
 
 import api.angia.com.shared.monitor.RequestIdFilter;
+import api.angia.com.shared.monitor.RequestLoggingFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +25,7 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint unauthorizedHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final RequestIdFilter requestIdFilter;
+    private final RequestLoggingFilter requestLoggingFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -51,6 +53,7 @@ public class SecurityConfig {
                         .requestMatchers("/actuator/**").permitAll()
                         .anyRequest().authenticated());
 
+        http.addFilterBefore(requestLoggingFilter, WebAsyncManagerIntegrationFilter.class);
         http.addFilterBefore(requestIdFilter, WebAsyncManagerIntegrationFilter.class);
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
