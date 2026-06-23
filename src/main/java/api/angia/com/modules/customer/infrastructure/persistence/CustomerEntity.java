@@ -24,7 +24,8 @@ public class CustomerEntity {
     @Id
     @GeneratedValue(generator = "random-8-digit")
     @GenericGenerator(name = "random-8-digit", strategy = "api.angia.com.shared.utils.Random8DigitIdGenerator")
-    private Long id;
+    @Column(length = 8)
+    private String id;
 
     @Column(unique = true, nullable = false)
     private String username;

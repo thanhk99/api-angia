@@ -30,11 +30,11 @@ public class TokenService {
      * Tạo Refresh Token mới và lưu vào DB.
      */
     @Transactional
-    public String createRefreshToken(Long ownerId, String ownerType) {
+    public String createRefreshToken(String ownerId, String ownerType) {
         // Dùng UUID làm refresh token cho đơn giản và an toàn
         String rawToken = UUID.randomUUID().toString() + "-" + UUID.randomUUID().toString();
         String tokenHash = jwtTokenProvider.hashToken(rawToken);
-        
+
         // Tính thời gian hết hạn
         LocalDateTime expiresAt = LocalDateTime.now()
                 .plus(jwtTokenProvider.getJwtRefreshExpirationMs(), ChronoUnit.MILLIS);
@@ -53,19 +53,20 @@ public class TokenService {
 
     /**
      * Xác thực Refresh Token và Rotate (xoay vòng token).
-     * Trả về entity cũ để biết owner, đồng thời đánh dấu token cũ là bị thu hồi (revoked).
+     * Trả về entity cũ để biết owner, đồng thời đánh dấu token cũ là bị thu hồi
+     * (revoked).
      */
     @Transactional
     public RefreshTokenEntity validateAndRotate(String rawRefreshToken) {
         String tokenHash = jwtTokenProvider.hashToken(rawRefreshToken);
-        
+
         RefreshTokenEntity entity = refreshTokenRepository.findByTokenHash(tokenHash)
                 .orElseThrow(() -> new RuntimeException("Refresh token không tồn tại."));
 
         if (entity.isRevoked()) {
             // Nếu token đã bị thu hồi mà vẫn được dùng -> Cảnh báo bảo mật!
             // Cần vô hiệu hoá toàn bộ token của user này
-            log.warn("Cảnh báo: Phát hiện sử dụng Refresh Token đã bị thu hồi! OwnerId: {}, OwnerType: {}", 
+            log.warn("Cảnh báo: Phát hiện sử dụng Refresh Token đã bị thu hồi! OwnerId: {}, OwnerType: {}",
                     entity.getOwnerId(), entity.getOwnerType());
             refreshTokenRepository.revokeAllByOwner(entity.getOwnerId(), entity.getOwnerType());
             throw new RuntimeException("Refresh token không hợp lệ (đã bị thu hồi).");
@@ -88,7 +89,7 @@ public class TokenService {
     @Transactional
     public void blacklistAccessToken(String rawAccessToken, Date expiresAt) {
         String tokenHash = jwtTokenProvider.hashToken(rawAccessToken);
-        
+
         // Không thêm nếu đã có
         if (blacklistTokenRepository.existsByTokenHash(tokenHash)) {
             return;
@@ -114,12 +115,12 @@ public class TokenService {
         String tokenHash = jwtTokenProvider.hashToken(rawAccessToken);
         return blacklistTokenRepository.existsByTokenHash(tokenHash);
     }
-    
+
     /**
      * Revoke toàn bộ refresh token của một owner
      */
     @Transactional
-    public void revokeAllRefreshTokens(Long ownerId, String ownerType) {
+    public void revokeAllRefreshTokens(String ownerId, String ownerType) {
         refreshTokenRepository.revokeAllByOwner(ownerId, ownerType);
     }
 

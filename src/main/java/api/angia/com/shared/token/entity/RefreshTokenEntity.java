@@ -20,14 +20,14 @@ import java.time.LocalDateTime;
 public class RefreshTokenEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     @Column(name = "token_hash", unique = true, nullable = false, length = 255)
     private String tokenHash;
 
     @Column(name = "owner_id", nullable = false)
-    private Long ownerId;
+    private String ownerId;
 
     @Column(name = "owner_type", nullable = false, length = 20)
     private String ownerType; // "CUSTOMER" | "ADMIN"

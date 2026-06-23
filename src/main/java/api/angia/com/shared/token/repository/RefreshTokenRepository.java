@@ -17,7 +17,7 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshTokenEntity
     // Thu hồi tất cả token của 1 chủ sở hữu (logout all devices)
     @Modifying
     @Query("UPDATE RefreshTokenEntity r SET r.revoked = true WHERE r.ownerId = :ownerId AND r.ownerType = :ownerType")
-    void revokeAllByOwner(Long ownerId, String ownerType);
+    void revokeAllByOwner(String ownerId, String ownerType);
 
     // Xoá token hết hạn (chạy định kỳ)
     @Modifying

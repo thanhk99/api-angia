@@ -1,5 +1,6 @@
 package api.angia.com.modules.customer.infrastructure.persistence;
 
+import api.angia.com.modules.customer.application.mapper.CustomerMapper;
 import api.angia.com.modules.customer.domain.model.Customer;
 import api.angia.com.modules.customer.domain.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
-    public Optional<Customer> findById(Long id) {
+    public Optional<Customer> findById(String id) {
         return jpaRepository.findById(id).map(this::toModel);
     }
 
