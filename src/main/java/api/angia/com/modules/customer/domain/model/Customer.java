@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Customer {
-    private Long id;
+    private String id;
     private String username;
     private String password; // Nullable cho SSO
     private String provider; // e.g., "local", "google", "facebook"

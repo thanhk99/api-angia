@@ -14,7 +14,7 @@ public class Random8DigitIdGenerator implements IdentifierGenerator {
 
     @Override
     public Serializable generate(SharedSessionContractImplementor session, Object object) {
-        Long id = generateRandomId();
+        String id = generateRandomId();
         int attempts = 0;
 
         while (idExists(session, object.getClass(), id) && attempts < 10) {
@@ -29,11 +29,12 @@ public class Random8DigitIdGenerator implements IdentifierGenerator {
         return id;
     }
 
-    private Long generateRandomId() {
-        return (long) (random.nextInt((MAX_ID - MIN_ID) + 1) + MIN_ID);
+    private String generateRandomId() {
+        int randomId = random.nextInt((MAX_ID - MIN_ID) + 1) + MIN_ID;
+        return String.valueOf(randomId);
     }
 
-    private boolean idExists(SharedSessionContractImplementor session, Class<?> entityClass, Long id) {
+    private boolean idExists(SharedSessionContractImplementor session, Class<?> entityClass, String id) {
         String entityName = entityClass.getSimpleName();
         String query = String.format("SELECT COUNT(e.id) FROM %s e WHERE e.id = :id", entityName);
         Long count = session.createQuery(query, Long.class)

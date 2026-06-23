@@ -16,6 +16,12 @@ public class AdminRepositoryImpl implements AdminRepository {
     private final AdminJpaRepository jpaRepository;
 
     @Override
+    public Optional<Admin> findById(String id) {
+        return jpaRepository.findById(id)
+                .map(this::toModel);
+    }
+
+    @Override
     public Optional<Admin> findByUsername(String username) {
         return jpaRepository.findByUsername(username)
                 .map(this::toModel);

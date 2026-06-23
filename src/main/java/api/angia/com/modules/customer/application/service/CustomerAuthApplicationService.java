@@ -63,8 +63,8 @@ public class CustomerAuthApplicationService {
             throw CustomerException.unauthorized();
         }
 
-        Customer customer = customerRepository.findById(entity.getOwnerId())
-                .orElseThrow(() -> CustomerException.notFound(entity.getOwnerId()));
+        Customer customer = customerRepository.findById(entity.getOwnerId().toString())
+                .orElseThrow(() -> CustomerException.notFoundById(entity.getOwnerId().toString()));
 
         if (!customer.isActive()) {
             throw CustomerException.accountDisabled();
