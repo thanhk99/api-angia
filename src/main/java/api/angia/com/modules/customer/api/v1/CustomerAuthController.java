@@ -4,6 +4,7 @@ import api.angia.com.modules.customer.api.v1.dto.request.*;
 import api.angia.com.modules.customer.api.v1.dto.response.AuthResponse;
 import api.angia.com.modules.customer.api.v1.dto.response.CustomerResponse;
 import api.angia.com.modules.customer.application.service.CustomerAuthApplicationService;
+import api.angia.com.shared.annotation.RateLimit;
 import api.angia.com.shared.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -59,6 +60,7 @@ public class CustomerAuthController {
                 .body(ApiResponse.success("Đăng ký thành công", response));
     }
 
+    @RateLimit(capacity = 2, refillTokens = 2)
     @GetMapping("/me")
     @Operation(summary = "Lấy thông tin cá nhân", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<ApiResponse<CustomerResponse>> getProfile(Authentication auth) {

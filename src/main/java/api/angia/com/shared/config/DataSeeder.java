@@ -24,7 +24,7 @@ public class DataSeeder implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         seedRoles();
-        seedSuperAdmin();
+        // seedSuperAdmin();
     }
 
     private void seedRoles() {
